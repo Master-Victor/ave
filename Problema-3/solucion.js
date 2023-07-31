@@ -1,7 +1,7 @@
 /**
  * 
  * @param {*} password String con la contraseña a validar
- * @returns retorna true en caso de que la contraseña sea valida, en caso contrario retorna un string con el error
+ * @returns retorna un array con los errores encontrados en la contraseña o true si no hay errores
  */
 
 function validator(password) {
@@ -22,8 +22,9 @@ function validator(password) {
         if ( password[i] === password[i - 1] ) errors.push("Caracteres seguidos");                       //Contiene dos letras/numeros iguales consecutivas
         if ( caracterEspecial < 2 && (password.length - 1) === i ) errors.push("Sin dos caracteres especiales !@#$%ˆ&*-_+=?");   // Pass con mas de 2 caracteres especiales
     }
-    return errors;
+    return errors.length === 0 ? true : errors;
 }
 
 console.log(validator('Abcdefghijklmnñopqrstuvwxyz123456789!@#$%^&*-_+=?')); // true
-console.log(validator('aBcdefghijklmnñopqrstuvwxyz12345678*90')); // false
+console.log(validator('aBcdefghijklmnñopqrstuvwxyz12345678*90')); // error
+console.log(validator("1 0"));
