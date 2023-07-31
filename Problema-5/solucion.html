@@ -80,7 +80,8 @@
             'Con espacios en blanco',
             'Con 0',
             'No tiene 4 numeros',
-            'Sin dos caracteres especiales !@#$%ˆ&*-_+=?'
+            'Sin dos caracteres especiales !@#$%ˆ&*-_+=?',
+            'Caracteres seguidos'
         ];
 
         inputPassword.addEventListener('input', verificarPassword);
@@ -88,7 +89,6 @@
         function verificarPassword() {
             const password = inputPassword.value;
             const erroresRecibido = validator(password);
-            console.log(erroresRecibido)
             if (erroresRecibido.length === 0) {
                 mostrarMensaje('Password válido', 'green');
             } else {
