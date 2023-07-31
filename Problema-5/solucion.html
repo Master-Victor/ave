@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problema 5</title>
+</head>
+
+<body>
+    <main>
+        <section>
+            <label for="pass">Pass:</label>
+            <input type="password" id="pass">
+            <div id="mensaje"></div>
+        </section>
+    </main>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        main {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 24px;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        section {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        ul li {
+            color: red;
+        }
+
+        div#mensaje {
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+    <script>
+        const inputPassword = document.getElementById('pass');
+        const mensaje = document.getElementById('mensaje');
+
+        const erroresConstantes = [
+            'Menos de 16 caracteres',
+            'Sin minusculas',
+            'Sin Mayusculas',
+            'Con espacios en blanco',
+            'Con 0',
+            'No tiene 4 numeros',
+            'Sin dos caracteres especiales !@#$%ˆ&*-_+=?'
+        ];
+
+        inputPassword.addEventListener('input', verificarPassword);
+
+        function verificarPassword() {
+            const password = inputPassword.value;
+            const erroresRecibido = validator(password);
+            console.log(erroresRecibido)
+            if (erroresRecibido.length === 0) {
+                mostrarMensaje('Password válido', 'green');
+            } else {
+                mostrarErrores(erroresConstantes, erroresRecibido);
+            }
+        }
+
+        function mostrarMensaje(texto, color) {
+            mensaje.textContent = texto;
+            mensaje.style.color = color;
+        }
+
+        function mostrarErrores(errores, erroresRecibido) {
+            const listaErrores = document.createElement('ul');
+
+            for (const error of errores) {
+                const itemError = document.createElement('li');
+                if (error === erroresRecibido[0] || error === erroresRecibido[1] || error === erroresRecibido[2] || error === erroresRecibido[3] || error === erroresRecibido[4] || error === erroresRecibido[5] || error === erroresRecibido[6]) {
+                    itemError.style.color = 'red';
+                    itemError.textContent = error;
+                    listaErrores.appendChild(itemError);
+                } else {
+                    itemError.style.color = 'green';
+                    itemError.textContent = error;
+                    listaErrores.appendChild(itemError);
+                }
+            }
+
+            mensaje.innerHTML = '';
+            mensaje.appendChild(listaErrores);
+        }
+
+        function validator(password) {
+            let number = 0;
+            let caracterEspecial = 0;
+            const errors = [];
+            const caracteresEspeciales = ['!', '@', '#', '$', '%', '^', '&', '*', '-', '_', '+', '=', '?'];
+            if (password.length <= 16) errors.push("Menos de 16 caracteres");                        //Pass con menos de 16 caracteres
+            if (password === password.toUpperCase()) errors.push("Sin minusculas");          //Pass con mayusculas
+            if (password === password.toLowerCase()) errors.push("Sin Mayusculas");          //Pass con minusculas
+            if (password.includes(" ")) errors.push("Con espacios en blanco");                     //Pass con espacios en blanco
+            if (password.includes("0")) errors.push("Con 0");                     //Pass con 0
+
+            for (let i = 0; i < password.length; i++) {
+                if (caracteresEspeciales.includes(password[i])) caracterEspecial += 1;     //Pass con caracteres especiales
+                if (isNaN(password[i])) number += 1;                                     //Pass con numeros
+                if (number < 4 && (password.length - 1) === i) errors.push("No tiene 4 numeros");             //Pass con mas de 4 numeros  
+                if (password[i] === password[i - 1]) errors.push("Caracteres seguidos");                       //Contiene dos letras/numeros iguales consecutivas
+                if (caracterEspecial < 2 && (password.length - 1) === i) errors.push("Sin dos caracteres especiales !@#$%ˆ&*-_+=?");   // Pass con mas de 2 caracteres especiales
+            }
+            return errors;
+        }
+    </script>
+</body>
+
+</html>
